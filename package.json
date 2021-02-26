@@ -1,6 +1,6 @@
 {
   "name": "@inhibitor1217/react-swipeablepanel",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A swipeable panel module for react",
   "main": "dist/index.js",
   "author": "inhibitor <inhibitor@kaist.ac.kr>",
