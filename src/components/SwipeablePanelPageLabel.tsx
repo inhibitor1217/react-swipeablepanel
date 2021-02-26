@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 interface PageLabelProps {
-  key: string;
   length: number;
   currentPage: number;
 }
