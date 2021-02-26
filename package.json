@@ -10,7 +10,8 @@
     "url": "git+https://github.com/inhibitor1217/react-swipeablepanel.git"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "run:example": "npx webpack serve --content-base examples/ --port 10000"
   },
   "dependencies": {
     "react": "^17.0.1",
@@ -18,8 +19,17 @@
     "styled-components": "^5.2.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.13.1",
+    "@babel/preset-env": "^7.13.5",
+    "@babel/preset-react": "^7.12.13",
     "@types/react": "^17.0.2",
     "@types/styled-components": "^5.1.7",
-    "typescript": "^4.2.2"
+    "babel-loader": "^8.2.2",
+    "react-dom": "^17.0.1",
+    "serve": "^11.3.2",
+    "typescript": "^4.2.2",
+    "webpack": "^5.24.2",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
   }
 }
