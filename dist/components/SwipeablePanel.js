@@ -457,6 +457,6 @@ export var SwipeablePanel = function (_a) {
         throw new Error("auto sliding requires looping of SwipeablePanel");
     }
     return (_jsxs(StyledWrapper, __assign({ ref: function (node) { return setWrapperNode(node); }, onMouseDown: !isMobile ? onWrapperMouseDown : undefined, onTouchStart: isMobile ? onWrapperTouchStart : undefined }, { children: [panels.map(function (panel, index) { return (_jsx(StyledPanel, __assign({ ref: panelNodeRefs[index] }, { children: panel }), index)); }),
-            widgets === null || widgets === void 0 ? void 0 : widgets.map(function (Widget) { return (_jsx(Widget, { length: numPanels, currentPage: currentPage }, void 0)); })] }), void 0));
+            widgets === null || widgets === void 0 ? void 0 : widgets.map(function (Widget, index) { return (_jsx(Widget, { length: numPanels, currentPage: currentPage }, "widget-" + index)); })] }), void 0));
 };
 var templateObject_1, templateObject_2;

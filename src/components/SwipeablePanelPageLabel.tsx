@@ -1,7 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 interface PageLabelProps {
+  key: string;
   length: number;
   currentPage: number;
 }
@@ -22,11 +23,12 @@ const StyledPageLabel = styled.div`
 `;
 
 export const SwipeablePanelPageLabel: React.FC<PageLabelProps> = ({
+  key,
   length,
   currentPage,
 }) => {
   return (
-    <StyledPageLabel>
+    <StyledPageLabel key={key}>
       <span>
         {currentPage + 1}/{length}
       </span>
