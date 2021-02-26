@@ -1,0 +1,8 @@
+{
+  "name": "@inhibitor1217/react-swipeablepanel",
+  "version": "0.1.0",
+  "description": "A swipeable panel module for react",
+  "main": "index.ts",
+  "author": "inhibitor <inhibitor@kaist.ac.kr>",
+  "license": "MIT"
+}
