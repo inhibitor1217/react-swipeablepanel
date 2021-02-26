@@ -655,8 +655,12 @@ export const SwipeablePanel: React.FC<SwipeablePanelProps> = ({
           {panel}
         </StyledPanel>
       ))}
-      {widgets?.map((Widget) => (
-        <Widget length={numPanels} currentPage={currentPage} />
+      {widgets?.map((Widget, index) => (
+        <Widget
+          key={`widget-${index}`}
+          length={numPanels}
+          currentPage={currentPage}
+        />
       ))}
     </StyledWrapper>
   );
