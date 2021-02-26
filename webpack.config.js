@@ -19,7 +19,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      "@inhibitor1217/react-swipeablepanel": path.resolve(__dirname, "./src"),
+      "@inhibitor1217/react-swipeablepanel": path.resolve(__dirname, "./dist"),
     },
   },
   entry: "./examples/app.js",
