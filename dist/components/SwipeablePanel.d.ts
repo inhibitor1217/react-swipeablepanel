@@ -2,6 +2,7 @@ import React from "react";
 import { Axis } from "../types/axis";
 import { Duration } from "../utils/duration";
 interface SwipeablePanelHelperComponentProps {
+    key: string;
     length: number;
     currentPage: number;
 }
