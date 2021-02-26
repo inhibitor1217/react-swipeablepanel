@@ -192,7 +192,6 @@ const StyledPanel = styled.div`
 `;
 
 interface SwipeablePanelHelperComponentProps {
-  key: string;
   length: number;
   currentPage: number;
 }

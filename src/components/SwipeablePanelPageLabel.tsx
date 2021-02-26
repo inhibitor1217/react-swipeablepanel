@@ -23,12 +23,11 @@ const StyledPageLabel = styled.div`
 `;
 
 export const SwipeablePanelPageLabel: React.FC<PageLabelProps> = ({
-  key,
   length,
   currentPage,
 }) => {
   return (
-    <StyledPageLabel key={key}>
+    <StyledPageLabel>
       <span>
         {currentPage + 1}/{length}
       </span>
