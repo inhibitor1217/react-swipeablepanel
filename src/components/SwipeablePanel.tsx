@@ -175,6 +175,21 @@ function asymptoticValue(x: number, halfWhen: number, maxValue: number) {
   return maxValue * (Math.atan(x / halfWhen) / (0.5 * Math.PI));
 }
 
+function isAdjacent(index: number, currentPage: number, numPages: number, loop?: boolean): boolean {
+  if (Math.abs(index - currentPage) <= 1) {
+    return true;
+  }
+
+  if (loop && (
+    currentPage === 0 && index === numPages - 1 ||
+    currentPage === numPages - 1 && index === 0
+  )) {
+    return true;
+  }
+
+  return false;
+}
+
 const StyledWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -232,7 +247,7 @@ export const SwipeablePanel: React.FC<SwipeablePanelProps> = ({
   const mousePositionRef = React.useRef<Position | null>(null);
   const mouseDeltaPositionRef = React.useRef<DeltaPosition | null>(null);
 
-  const autoSlideTimeoutRef = React.useRef<number | null>(null);
+  const autoSlideTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const getSiblingNodes = React.useCallback(() => {
     const nextPage = (currentPage + 1) % numPanels;
@@ -650,11 +665,14 @@ export const SwipeablePanel: React.FC<SwipeablePanelProps> = ({
       onMouseDown={!isMobile ? onWrapperMouseDown : undefined}
       onTouchStart={isMobile ? onWrapperTouchStart : undefined}
     >
-      {panels.map((panel, index) => (
-        <StyledPanel key={index} ref={panelNodeRefs[index]}>
-          {panel}
-        </StyledPanel>
-      ))}
+      {panels.map((panel, index) => {
+        const showPanel = isAdjacent(index, currentPage, numPanels, loop);
+        return showPanel && (
+          <StyledPanel key={index} ref={panelNodeRefs[index]}>
+            {panel}
+          </StyledPanel>
+        );
+      })}
       {widgets?.map((Widget, index) => (
         <Widget
           key={`widget-${index}`}

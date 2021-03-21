@@ -1,6 +1,6 @@
 {
   "name": "@inhibitor1217/react-swipeablepanel",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A swipeable panel module for react",
   "main": "dist/index.js",
   "author": "inhibitor <inhibitor@kaist.ac.kr>",
@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "run:example": "npx webpack serve --content-base examples/ --port 10000"
+    "run:example": "npx webpack serve --content-base examples/ --host 0.0.0.0 --port 10000"
   },
   "dependencies": {
     "react": "^17.0.1",

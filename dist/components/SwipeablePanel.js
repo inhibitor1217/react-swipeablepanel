@@ -144,6 +144,16 @@ function determinePage(delta, frameSize, state) {
 function asymptoticValue(x, halfWhen, maxValue) {
     return maxValue * (Math.atan(x / halfWhen) / (0.5 * Math.PI));
 }
+function isAdjacent(index, currentPage, numPages, loop) {
+    if (Math.abs(index - currentPage) <= 1) {
+        return true;
+    }
+    if (loop && (currentPage === 0 && index === numPages - 1 ||
+        currentPage === numPages - 1 && index === 0)) {
+        return true;
+    }
+    return false;
+}
 var StyledWrapper = styled.div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  width: 100%;\n  height: 100%;\n  position: relative;\n  overflow: hidden;\n"], ["\n  width: 100%;\n  height: 100%;\n  position: relative;\n  overflow: hidden;\n"])));
 var StyledPanel = styled.div(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  overflow: hidden;\n  transition-property: transform;\n  transition-timing-function: ease;\n"], ["\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  overflow: hidden;\n  transition-property: transform;\n  transition-timing-function: ease;\n"])));
 export var SwipeablePanel = function (_a) {
@@ -456,7 +466,10 @@ export var SwipeablePanel = function (_a) {
     if (!loop && auto) {
         throw new Error("auto sliding requires looping of SwipeablePanel");
     }
-    return (_jsxs(StyledWrapper, __assign({ ref: function (node) { return setWrapperNode(node); }, onMouseDown: !isMobile ? onWrapperMouseDown : undefined, onTouchStart: isMobile ? onWrapperTouchStart : undefined }, { children: [panels.map(function (panel, index) { return (_jsx(StyledPanel, __assign({ ref: panelNodeRefs[index] }, { children: panel }), index)); }),
+    return (_jsxs(StyledWrapper, __assign({ ref: function (node) { return setWrapperNode(node); }, onMouseDown: !isMobile ? onWrapperMouseDown : undefined, onTouchStart: isMobile ? onWrapperTouchStart : undefined }, { children: [panels.map(function (panel, index) {
+                var showPanel = isAdjacent(index, currentPage, numPanels, loop);
+                return showPanel && (_jsx(StyledPanel, __assign({ ref: panelNodeRefs[index] }, { children: panel }), index));
+            }),
             widgets === null || widgets === void 0 ? void 0 : widgets.map(function (Widget, index) { return (_jsx(Widget, { length: numPanels, currentPage: currentPage }, "widget-" + index)); })] }), void 0));
 };
 var templateObject_1, templateObject_2;
