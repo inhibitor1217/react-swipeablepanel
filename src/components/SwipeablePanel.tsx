@@ -100,7 +100,7 @@ function determinePage(
     currentPage: number;
     numPages: number;
   }
-): { newPage: number; direction: MovementDirection | null } {
+): { newPage: number; direction: MovementDirection | null, attemptedDirection: MovementDirection } {
   const { dx, dy } = delta;
   const { width, height } = frameSize;
   const { axis, loop, currentPage, numPages } = state;
@@ -109,7 +109,8 @@ function determinePage(
     case Axis.horizontal: {
       const isOverThreshold = Math.abs(dx / width) >= PAGE_MOVE_THRESHOLD;
       if (!isOverThreshold) {
-        return { newPage: currentPage, direction: null };
+        const attemptedDirection = dx >= 0 ? MovementDirection.RIGHT : MovementDirection.LEFT;
+        return { newPage: currentPage, direction: null, attemptedDirection };
       }
 
       if (dx < 0) {
@@ -118,10 +119,12 @@ function determinePage(
           ? {
               newPage: (currentPage + 1) % numPages,
               direction: MovementDirection.RIGHT,
+              attemptedDirection: MovementDirection.RIGHT,
             }
           : {
               newPage: currentPage,
               direction: null,
+              attemptedDirection: MovementDirection.RIGHT,
             };
       } else {
         const hasPreviousPage = currentPage > 0;
@@ -129,17 +132,20 @@ function determinePage(
           ? {
               newPage: (currentPage + numPages - 1) % numPages,
               direction: MovementDirection.LEFT,
+              attemptedDirection: MovementDirection.LEFT,
             }
           : {
               newPage: currentPage,
               direction: null,
+              attemptedDirection: MovementDirection.LEFT,
             };
       }
     }
     case Axis.vertical: {
       const isOverThreshold = Math.abs(dy / height) >= PAGE_MOVE_THRESHOLD;
       if (!isOverThreshold) {
-        return { newPage: currentPage, direction: null };
+        const attemptedDirection = dy >= 0 ? MovementDirection.UP : MovementDirection.DOWN;
+        return { newPage: currentPage, direction: null, attemptedDirection };
       }
 
       if (dy < 0) {
@@ -148,10 +154,12 @@ function determinePage(
           ? {
               newPage: (currentPage + 1) % numPages,
               direction: MovementDirection.DOWN,
+              attemptedDirection: MovementDirection.DOWN,
             }
           : {
               newPage: currentPage,
               direction: null,
+              attemptedDirection: MovementDirection.DOWN,
             };
       } else {
         const hasPreviousPage = currentPage > 0;
@@ -159,15 +167,17 @@ function determinePage(
           ? {
               newPage: (currentPage + numPages - 1) % numPages,
               direction: MovementDirection.UP,
+              attemptedDirection: MovementDirection.UP,
             }
           : {
               newPage: currentPage,
               direction: null,
+              attemptedDirection: MovementDirection.UP,
             };
       }
     }
     default:
-      return { newPage: currentPage, direction: null };
+      throw new Error('unreachable code');
   }
 }
 
@@ -425,7 +435,7 @@ export const SwipeablePanel: React.FC<SwipeablePanelProps> = ({
   );
 
   const moveTowards = React.useCallback(
-    (direction: MovementDirection | null) => {
+    (direction: MovementDirection | null, attemptedDirection?: MovementDirection) => {
       if (!wrapperSize) {
         throw new Error(`size of wrapper node not available`);
       }
@@ -456,12 +466,20 @@ export const SwipeablePanel: React.FC<SwipeablePanelProps> = ({
         updatePositionOf(current, { x: 0, y: 0 }, animationDuration);
         switch (axis) {
           case Axis.horizontal:
-            updatePositionOf(next, { x: width, y: 0 }, animationDuration);
-            updatePositionOf(previous, { x: -width, y: 0 }, animationDuration);
+            if (attemptedDirection === MovementDirection.LEFT) {
+              updatePositionOf(next, { x: width, y: 0 }, animationDuration);
+            }
+            if (attemptedDirection === MovementDirection.RIGHT) {
+              updatePositionOf(previous, { x: -width, y: 0 }, animationDuration);
+            }
             break;
           case Axis.vertical:
-            updatePositionOf(next, { x: 0, y: height }, animationDuration);
-            updatePositionOf(previous, { x: 0, y: -height }, animationDuration);
+            if (attemptedDirection === MovementDirection.DOWN) {
+              updatePositionOf(next, { x: 0, y: height }, animationDuration);
+            }
+            if (attemptedDirection === MovementDirection.UP) {
+              updatePositionOf(previous, { x: 0, y: -height }, animationDuration);
+            }
         }
       }
     },
@@ -482,7 +500,7 @@ export const SwipeablePanel: React.FC<SwipeablePanelProps> = ({
     }
 
     const delta = mouseDeltaPositionRef.current;
-    const { newPage, direction } = determinePage(delta, wrapperSize, {
+    const { newPage, direction, attemptedDirection } = determinePage(delta, wrapperSize, {
       axis,
       loop,
       currentPage,
@@ -490,7 +508,7 @@ export const SwipeablePanel: React.FC<SwipeablePanelProps> = ({
     });
 
     setCurrentPage(newPage);
-    moveTowards(direction);
+    moveTowards(direction, attemptedDirection);
   }, [axis, loop, currentPage, numPanels, wrapperSize]);
 
   const onWrapperTouchEnd = React.useCallback(() => {
